@@ -1,0 +1,53 @@
+#!/Users/dharmeshsingh/.virtualenvs/py3/bin/python
+
+import argparse
+import subprocess
+parser = argparse.ArgumentParser(description = "A utitlity app for creating files for programming languages")
+
+parser.add_argument('-f','--file',action="store", dest="file_name")
+
+parser.add_argument('-v','--with-vector',action='store_true', dest='include_vector',default=False)
+
+parser.add_argument('-s','--with-string',action='store_true', dest='include_string',default=False)
+
+parser.add_argument('-d','--without-defines',action='store_false',dest='include_defines',default=True)
+
+parser.add_argument('-n','--no-run',action='store_true',dest='show_only',default=False);
+
+args = parser.parse_args()
+INCLUDES=[]
+DEFINES=[]
+CMD=[]
+
+
+#Default values for defines
+DEFINES.append("ll long long int")
+DEFINES.append("ull unsigned long long int") 
+
+
+if "cpp" in args.file_name:
+	INCLUDES.append("<iostream>")
+
+	if args.include_vector:
+		INCLUDES.append("<vector>")
+	if args.include_string:
+		INCLUDES.append("<string>")
+
+	
+CMD.append("touch \""+ args.file_name + "\"")
+
+for i in INCLUDES:
+	CMD.append("echo \"#include " + i + "\" >> \"" + args.file_name + "\"")
+if args.include_defines:
+	for i in DEFINES:
+		CMD.append("echo \"#define " + i + "\" >> \"" + args.file_name + "\"")
+
+if args.show_only:
+	for i in CMD:
+		print(i)
+else:
+	for i in CMD:
+		print(i.split())
+		subprocess.call(i.split())
+
+
