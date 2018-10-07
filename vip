@@ -1,7 +1,7 @@
 #!/Users/dharmeshsingh/.virtualenvs/py3/bin/python
 
 import argparse
-import subprocess
+import os
 parser = argparse.ArgumentParser(description = "A utitlity app for creating files for programming languages")
 
 parser.add_argument('-f','--file',action="store", dest="file_name")
@@ -17,7 +17,6 @@ parser.add_argument('-n','--no-run',action='store_true',dest='show_only',default
 args = parser.parse_args()
 INCLUDES=[]
 DEFINES=[]
-CMD=[]
 
 
 #Default values for defines
@@ -33,21 +32,22 @@ if "cpp" in args.file_name:
 	if args.include_string:
 		INCLUDES.append("<string>")
 
-	
-CMD.append("touch \""+ args.file_name + "\"")
+
+FILE = open(args.file_name,"w+")	
 
 for i in INCLUDES:
-	CMD.append("echo \"#include " + i + "\" >> \"" + args.file_name + "\"")
+	FILE.write("#include " + i + "\n")
+
 if args.include_defines:
 	for i in DEFINES:
-		CMD.append("echo \"#define " + i + "\" >> \"" + args.file_name + "\"")
-
+		FILE.write("#define " + i + "\n")
 if args.show_only:
-	for i in CMD:
-		print(i)
-else:
-	for i in CMD:
-		print(i.split())
-		subprocess.call(i.split())
+	print("A file named \'"+args.file_name+" will be created with following data: ")
+	line = FILE.readline()
+	while line:
+		print(line)
+		line = FILE.readline()
+	os.remove(args.file_name)
+		
 
 
