@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ -d ~/lds ]
+then
+rm -rf ~/lds
+fi
+mkdir ~/lds
+cp -r ./bin ~/lds/
+
+
+BASH_PROFILE="~/.bashrc"
+
+if [[ `uname -s` == *"Darwin"* ]]
+then 
+BASH_PROFILE='~/.bash_profile'
+fi
+
+echo 'export PATH=~/lds/bin:$PATH'  >> $BASH_PROFILE
+echo "Installed..." 
