@@ -12,17 +12,25 @@ parser.add_argument('-s','--with-string',action='store_true', dest='include_stri
 
 parser.add_argument('-d','--without-defines',action='store_false',dest='include_defines',default=True)
 
-parser.add_argument('-n','--no-run',action='store_true',dest='show_only',default=False);
+parser.add_argument('-n','--no-run',action='store_true',dest='show_only',default=False)
 
+parser.add_argument('-k','--not-kickstart',action='store_false',dest='kickstart',default=True)
 args = parser.parse_args()
 INCLUDES=[]
 DEFINES=[]
 
 
+
 #Default values for defines
 DEFINES.append("ll long long int")
 DEFINES.append("ull unsigned long long int") 
+DEFINES.append("MIN(x,y) ((x<y)?x:y)")
+DEFINES.append("MAX(x,y) ((x>y)?x:y)")
+DEFINES.append("FOR(a,b) for(int i=a; i<b; i++)")
+DEFINES.append("FOR(a) for(int i=0; i<b; i++)")
 
+#Default BODY
+BODY = "\tint t,T;\n\tstd::cin>>T;\n\n\n\tfor(t=1; t<=T; t++)\n\t{\n\n\t\tstd::cout<<\"Case #\"<<t<<\": \"<<;\n\t}\n"
 
 if "cpp" in args.file_name:
 	INCLUDES.append("<iostream>")
@@ -32,15 +40,20 @@ if "cpp" in args.file_name:
 	if args.include_string:
 		INCLUDES.append("<string>")
 
-
+	
 FILE = open(args.file_name,"w+")	
 
 for i in INCLUDES:
 	FILE.write("#include " + i + "\n")
 
+FILE.write("\n\n\n\n")
 if args.include_defines:
 	for i in DEFINES:
 		FILE.write("#define " + i + "\n")
+
+FILE.write("\n\nint main()\n{");
+FILE.write(BODY + "\n")
+FILE.write("}\n")
 if args.show_only:
 	print("A file named \'"+args.file_name+" will be created with following data: ")
 	line = FILE.readline()
