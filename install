@@ -7,13 +7,17 @@ fi
 mkdir ~/lds
 cp -r ./bin ~/lds/
 
-
-BASH_PROFILE="~/.bashrc"
+HOME=`echo ~`
+BIN_DIR="$HOME/lds/bin"
+BASH_PROFILE=".bashrc"
 
 if [[ `uname -s` == *"Darwin"* ]]
 then 
-BASH_PROFILE='~/.bash_profile'
+BASH_PROFILE='.bash_profile'
 fi
 
-echo 'export PATH=~/lds/bin:$PATH'  >> $BASH_PROFILE
+echo ''  >> "$HOME/$BASH_PROFILE"
+echo '#for Lazy Developer Script'  >> "$HOME/$BASH_PROFILE"
+echo "export PATH=$BIN_DIR:"'$PATH'  >> "$HOME/$BASH_PROFILE"
+
 echo "Installed..." 
