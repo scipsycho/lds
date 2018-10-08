@@ -16,6 +16,12 @@ then
 BASH_PROFILE='.bash_profile'
 fi
 
+if [[ "$PATH" == *$BIN_DIR* ]]
+then 
+	echo "Path already added!! Skipping!"
+	exit
+fi
+
 echo ''  >> "$HOME/$BASH_PROFILE"
 echo '#for Lazy Developer Script'  >> "$HOME/$BASH_PROFILE"
 echo "export PATH=$BIN_DIR:"'$PATH'  >> "$HOME/$BASH_PROFILE"
