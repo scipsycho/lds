@@ -4,17 +4,17 @@ import argparse
 import os
 parser = argparse.ArgumentParser(description = "A utitlity app for creating files for programming languages")
 
-parser.add_argument('-f','--file',action="store", dest="file_name")
+parser.add_argument('-f','--file',action="store", dest="file_name",help="name of the file to be created")
 
-parser.add_argument('-v','--with-vector',action='store_true', dest='include_vector',default=False)
+parser.add_argument('-v','--with-vector',action='store_true', help = "include vector header", dest='include_vector',default=False)
 
-parser.add_argument('-s','--with-string',action='store_true', dest='include_string',default=False)
+parser.add_argument('-s','--with-string',action='store_true', dest='include_string', help="include string header", default=False)
 
-parser.add_argument('-d','--without-defines',action='store_false',dest='include_defines',default=True)
+parser.add_argument('-d','--without-defines',action='store_false', help="do not include the default defines",dest='include_defines',default=True)
 
-parser.add_argument('-n','--no-run',action='store_true',dest='show_only',default=False)
+parser.add_argument('-n','--no-run',action='store_true',dest='show_only',help = "output the contents of the file to STDOUT instead of creating the file",default=False)
 
-parser.add_argument('-k','--not-kickstart',action='store_false',dest='kickstart',default=True)
+parser.add_argument('-k','--not-kickstart',action='store_false', help = "do not include special things made just for kickstart",dest='kickstart',default=True)
 args = parser.parse_args()
 INCLUDES=[]
 DEFINES=[]
