@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ "$1" == "" ]]
+then
+	git | sed -r 's/git/gitdir/g'
+	exit
+fi
+for i in *
+do
+	if [ -d "./$i/.git" ]
+	then
+		echo "Repository: $i"
+		git -C $i $@
+	fi
+done
