@@ -30,8 +30,8 @@ DEFINES.append("FOR(a,b) for(int i=a; i<b; i++)")
 DEFINES.append("FOR(a) for(int i=0; i<b; i++)")
 
 #Default BODY
-BODY = "\tint t,T;\n\tstd::cin>>T;\n\n\n\tfor(t=1; t<=T; t++)\n\t{\n\n\t\tstd::cout<<\"Case #\"<<t<<\": \"<<;\n\t}\n"
-
+BODY = "\tint t,T;\n\tstd::cin>>T;\n\n\n\tfor(t=1; t<=T; t++)\n\t{\n\n\t\tstd::cout<<\"Case #\"<<t<<\": \"<<run()<<std::endl;\n\t}\n"
+FUNCS = "run()\n{\n\n}"
 if "cpp" in args.file_name:
 	INCLUDES.append("<iostream>")
 
@@ -51,6 +51,7 @@ if args.include_defines:
 	for i in DEFINES:
 		FILE.write("#define " + i + "\n")
 
+FILE.write(FUNCS)
 FILE.write("\n\nint main()\n{");
 FILE.write(BODY + "\n")
 FILE.write("}\n")
