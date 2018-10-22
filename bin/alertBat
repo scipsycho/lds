@@ -1,0 +1,5 @@
+#!/bin/bash
+
+curr=` pmset -g batt | awk '/%/{ print $3 }'  | cut -d '%' -f 1`
+
+echo "$curr% left" 
