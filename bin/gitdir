@@ -9,7 +9,7 @@ for i in *
 do
 	if [ -d "./$i/.git" ]
 	then
-		echo "Repository: $i"
+		echo "$(tput setaf 2)Repository: $i$(tput sgr0)"
 		git -C $i $@
 	fi
 done
