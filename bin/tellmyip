@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#Only configuring for the wireless interface
+if [[ $IFACE != "wlp4s0" ]]; then
+"Require sudo access to move the respective binary: "
+	exit
+fi
 if [[ $1 == "" ]]; then
 	RECV_EMAIL="dsingh1664@gmail.com"
 else
