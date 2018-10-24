@@ -7,7 +7,6 @@ fi
 mkdir ~/lds
 cp -r ./bin ~/lds/
 
-HOME=`echo ~`
 BIN_DIR="$HOME/lds/bin"
 BASH_PROFILE=".bashrc"
 
@@ -16,15 +15,24 @@ then
 BASH_PROFILE='.bash_profile'
 fi
 
+echo ''  > /tmp/ENV_VAR_LDS
+echo '#for Lazy Developer Script'  >> /tmp/ENV_VAR_LDS
+echo "export PATH=$BIN_DIR:"'$PATH'  >> /tmp/ENV_VAR_LDS
+
+#for running tellmyip at start
+echo "$BIN_DIR/tellmyip" >> /tmp/ENV_VAR_LDS
+
 if [[ "$PATH" == *$BIN_DIR* ]]
 then 
 	echo "Path already added!! Skipping!"
+	echo "Make sure the following lines are in $HOME/$BASH_PROFILE"
+	cat /tmp/ENV_VAR_LDS
+	rm /tmp/ENV_VAR_LDS
 	exit
 fi
 
-echo ''  >> "$HOME/$BASH_PROFILE"
-echo '#for Lazy Developer Script'  >> "$HOME/$BASH_PROFILE"
-echo "export PATH=$BIN_DIR:"'$PATH'  >> "$HOME/$BASH_PROFILE"
+cat /tmp/ENV_VAR_LDS >> "$HOME/$BASH_PROFILE"
+rm /tmp/ENV_VAR_LDS
 
 source "$HOME/$BASH_PROFILE"
 
