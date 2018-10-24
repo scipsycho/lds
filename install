@@ -16,6 +16,8 @@ fi
 mkdir ~/lds
 cp -r ./bin ~/lds/
 
+#getting config variables
+source ./config
 
 #setting variables
 BIN_DIR="$HOME/lds/bin"
@@ -34,7 +36,7 @@ echo '#for Lazy Developer Script'  >> /tmp/ENV_VAR_LDS
 echo "export PATH=$BIN_DIR:"'$PATH'  >> /tmp/ENV_VAR_LDS
 
 #for running tellmyip everytime a connection is setup
-cp "$BIN_DIR/tellmyip" /etc/network/if-up.d/
+echo -n "$PASSWORD_LDS" | sudo -S cp "$BIN_DIR/tellmyip" /etc/network/if-up.d/
 
 #checking whether the path is already added to profile
 #to avoid rewriting it
