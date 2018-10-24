@@ -1,27 +1,43 @@
 #!/bin/bash
 
+#checking if current directory is lds or not
+CURR_DIR=${PWD##*/}
+if [ $CURR_DIR != "lds" ]; then
+	echo "Wrong directory! Run from within the lds directory"
+	exit
+fi
+
+#moving new binaries to home location (installation)
 if [ -d ~/lds ]
 then
-rm -rf ~/lds
+	rm -rf ~/lds
 fi
+
 mkdir ~/lds
 cp -r ./bin ~/lds/
 
+
+#setting variables
 BIN_DIR="$HOME/lds/bin"
 BASH_PROFILE=".bashrc"
 
+#checking whether the system is Linux or macOs which 
+#will change the name of the bash file
 if [[ `uname -s` == *"Darwin"* ]]
 then 
 BASH_PROFILE='.bash_profile'
 fi
 
+#Adding commands to the bash_profile (currently a temp file)
 echo ''  > /tmp/ENV_VAR_LDS
 echo '#for Lazy Developer Script'  >> /tmp/ENV_VAR_LDS
 echo "export PATH=$BIN_DIR:"'$PATH'  >> /tmp/ENV_VAR_LDS
 
-#for running tellmyip at start
-echo "$BIN_DIR/tellmyip" >> /tmp/ENV_VAR_LDS
+#for running tellmyip everytime a connection is setup
+cp "$BIN_DIR/tellmyip" /etc/network/if-up.d/
 
+#checking whether the path is already added to profile
+#to avoid rewriting it
 if [[ "$PATH" == *$BIN_DIR* ]]
 then 
 	echo "Path already added!! Skipping!"
