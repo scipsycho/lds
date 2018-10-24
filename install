@@ -26,4 +26,6 @@ echo ''  >> "$HOME/$BASH_PROFILE"
 echo '#for Lazy Developer Script'  >> "$HOME/$BASH_PROFILE"
 echo "export PATH=$BIN_DIR:"'$PATH'  >> "$HOME/$BASH_PROFILE"
 
+source "$HOME/$BASH_PROFILE"
+
 echo "Installed..." 
