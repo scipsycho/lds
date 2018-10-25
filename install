@@ -13,9 +13,7 @@ then
 	rm -rf ~/lds
 fi
 
-mkdir ~/lds
-cp -r ./bin ~/lds/
-
+cp -r . ~/lds
 #getting config variables
 source ./config
 
