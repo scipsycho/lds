@@ -14,8 +14,6 @@ then
 fi
 
 cp -r . ~/lds
-#getting config variables
-source ./config
 
 #setting variables
 BIN_DIR="$HOME/lds/bin"
@@ -25,7 +23,7 @@ BASH_PROFILE=".bashrc"
 #will change the name of the bash file
 if [[ `uname -s` == *"Darwin"* ]]
 then 
-BASH_PROFILE='.bash_profile'
+	BASH_PROFILE='.bash_profile'
 fi
 
 #Adding commands to the bash_profile (currently a temp file)
@@ -34,6 +32,9 @@ echo '#for Lazy Developer Script'  >> /tmp/ENV_VAR_LDS
 echo "export PATH=$BIN_DIR:"'$PATH'  >> /tmp/ENV_VAR_LDS
 
 #for running tellmyip everytime a connection is setup
+#getting config variables
+source ./config
+
 echo -n "$PASSWORD_LDS" | sudo -S cp "$BIN_DIR/tellmyip" /etc/network/if-up.d/
 
 #checking whether the path is already added to profile
