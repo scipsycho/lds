@@ -15,3 +15,10 @@ echo "From: scipsychomail@gmail.com" >> /tmp/SMTP_MESSAGE_IP
 echo "Subject: Ip Address of Ubuntu" >> /tmp/SMTP_MESSAGE_IP
 echo $IP_ADDR >> /tmp/SMTP_MESSAGE_IP
 ssmtp $RECV_EMAIL < /tmp/SMTP_MESSAGE_IP > /dev/null
+
+#Creating a notification
+if [[ `uname -s` == *"Darwin"* ]] 
+then
+	osascript -e 'display notification "I.P. Address Sent!" with title "Lazy Developer Script"'
+else
+	notify-send "I.P. Address Sent! - Lazy Developer Script""  
