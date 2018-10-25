@@ -21,4 +21,5 @@ if [[ `uname -s` == *"Darwin"* ]]
 then
 	osascript -e 'display notification "I.P. Address Sent!" with title "Lazy Developer Script"'
 else
-	notify-send "I.P. Address Sent! - Lazy Developer Script""  
+	notify-send "I.P. Address Sent! - Lazy Developer Script"  
+fi
