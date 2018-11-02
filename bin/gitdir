@@ -5,6 +5,12 @@ then
 	git | sed -r 's/git/gitdir/g'
 	exit
 fi
+	
+if [ -d ".git" ]
+then
+	echo "$(tput setaf 2)Repository: `echo "${PWD##*/}"`$(tput sgr0)"
+	git  $@
+fi
 for i in *
 do
 	if [ -d "./$i/.git" ]
