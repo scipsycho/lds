@@ -8,15 +8,15 @@ if [ $CURR_DIR != "lds" ]; then
 fi
 
 #moving new binaries to home location (installation)
-if [ -d ~/lds ]
+if [ -d ~/.lds ]
 then
-	rm -rf ~/lds
+	rm -rf ~/.lds
 fi
 
-cp -r . ~/lds
+cp -r . ~/.lds
 
 #setting variables
-BIN_DIR="$HOME/lds/bin"
+BIN_DIR="$HOME/.lds/bin"
 BASH_PROFILE=".bashrc"
 
 #checking whether the system is Linux or macOs which 
