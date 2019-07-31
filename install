@@ -10,11 +10,12 @@ fi
 #moving new binaries to home location (installation)
 if [ -d ~/.lds ]
 then
+  chmod -R a+wX ~/.lds
 	rm -rf ~/.lds
 fi
 
 cp -r . ~/.lds
-
+chmod -R a-wX ~/.lds
 #setting variables
 BIN_DIR="$HOME/.lds/bin"
 BASH_PROFILE=".bashrc"
