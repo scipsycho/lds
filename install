@@ -31,11 +31,19 @@ echo ''  > /tmp/ENV_VAR_LDS
 echo '#for Lazy Developer Script'  >> /tmp/ENV_VAR_LDS
 echo "export PATH=$BIN_DIR:"'$PATH'  >> /tmp/ENV_VAR_LDS
 
-#for running tellmyip everytime a connection is setup
-#getting config variables
-source ./config
 
-echo -n "$PASSWORD_LDS" | sudo -S cp "$BIN_DIR/tellmyip" /etc/network/if-up.d/
+#Asking user whether to install tellmyip or not
+INSTALL_tellmyip="n"
+echo "Do you want to autorun tellmyip whenever the wirless interface is up?? (y/n) (Default: No): "
+read INSTALL_tellmyip
+
+if [[ "$INSTALL_tellmyip" == "y" || "$INSTALL_tellmyip" == "Y" || "$INSTALL_tellmyip" == "yes" ]]
+then
+  #for running tellmyip everytime a connection is setup
+  #getting config variables
+  source ./config
+  echo -n "$PASSWORD_LDS" | sudo -S cp "$BIN_DIR/tellmyip" /etc/network/if-up.d/
+fi
 
 #checking whether the path is already added to profile
 #to avoid rewriting it
