@@ -1,0 +1,10 @@
+#!/bin/bash
+
+BACKUP_FOLDER="$HOME/.projectBackup"
+if [ ! -d "$BACKUP_FOLDER" ]
+then
+  mkdir "$BACKUP_FOLDER"
+  chmod ug-w "$BACKUP_FOLDER"
+fi
+
+

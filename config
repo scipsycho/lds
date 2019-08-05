@@ -1,7 +1,14 @@
 ###############################################################################
 #                               CONFIG FILE
 ################################################################################
-USER_NAME_LDS=
-PASSWORD_LDS=
+#################################INSTALL TIME###################################
+export LDS_USER_NAME=
+export LDS_USER_PASSWORD=
+export LDS_HOME_DIR="$HOME/.lds"
+export LDS_BIN_DIR="$LDS_HOME_DIR/bin"
+export LDS_BASH_PROFILE=".bashrc"
+export LDS_TEMP_FILE="/tmp/ENV_VAR_LDS"
+################################################################################
+#FOR GOTO
+export LDS_GOTO_FILE="$LDS_HOME_DIR/tmp/goto_alias"
 
-###############################################################################
