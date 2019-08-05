@@ -60,6 +60,10 @@ do
       showHelpMenu 
       exit 
     ;; 
+  list|--list|-l)
+    cat "$LDS_GOTO_FILE"
+    return
+    ;;
     *)
       ALIAS=$1
       if [[ "$ALIAS" == "" ]]

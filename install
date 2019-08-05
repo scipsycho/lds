@@ -15,10 +15,13 @@ source ./config
 if [ -d "$LDS_HOME_DIR" ]
 then
   chmod -R a+wX "$LDS_HOME_DIR"
-	rm -rf ~/.lds
+  cp -r "$LDS_HOME_DIR/tmp" "/tmp/LDS_temp_dir/"
+  rm -rf "$LDS_HOME_DIR"
 fi
 
 cp -r . "$LDS_HOME_DIR"
+cp -r "/tmp/LDS_temp_dir/" "$LDS_HOME_DIR/tmp/"
+rm -rf "/tmp/LDS_temp_dir"
 chmod -R a-wX "$LDS_HOME_DIR"
 chmod -R a+wX "$LDS_HOME_DIR/tmp"
 
