@@ -34,6 +34,7 @@ echo ''  > "$LDS_TEMP_FILE"
 echo '#for Lazy Developer Script'  >> "$LDS_TEMP_FILE"
 echo "export PATH=$LDS_BIN_DIR:"'$PATH'  >> "$LDS_TEMP_FILE"
 echo "source $LDS_HOME_DIR/config" >> "$LDS_TEMP_FILE"
+echo "alias goto=\"source $LDS_BIN_DIR/goto\"" >> "$LDS_TEMP_FILE"
 
 #Asking user whether to install tellmyip or not
 INSTALL_tellmyip="n"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-if [[ -d "$LDS_GOTO_FILE" ]]
+if [[ -f "$LDS_GOTO_FILE" ]]
 then 
   source "$LDS_GOTO_FILE" 
 else
@@ -40,7 +40,6 @@ do
   case $1 in 
     -r|--register)
       REGISTER_DIR="$2"
-      echo "Registered dir  $REGISTER_DIR"
       isRegister="y"
       if ! [[ -d "$REGISTER_DIR" ]]
       then 
@@ -75,15 +74,12 @@ done
 
 if [[ "$isRegister" == "n" ]]
 then
-  cd $ALIAS > /dev/null 2>&1 || echo "No such alias exists. See --help for more details."
-  exit
+  cd "${!ALIAS}"
 elif [[ -d "$REGISTER_DIR" ]]
 then 
-  echo "I am here"
   echo "$ALIAS=$REGISTER_DIR" >> "$LDS_GOTO_FILE"
   echo "Alias $ALIAS has been created for $REGISTER_DIR" 
 fi
-
 
 
 
