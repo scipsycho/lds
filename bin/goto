@@ -28,7 +28,7 @@ function showHelpMenu {
 if [[ $# -gt 3 ]] 
     then
         showHelpMenu
-        exit
+        return
     fi
 
 
@@ -44,7 +44,7 @@ do
       if ! [[ -d "$REGISTER_DIR" ]]
       then 
           echo "No such directory! See --help for more details."
-        exit
+        return
       fi 
       REGISTER_DIR=`cd $REGISTER_DIR; pwd`
       shift
@@ -54,11 +54,11 @@ do
       mv "$LDS_GOTO_FILE" "${LDS_GOTO_FILE}_backup"
       rm "$LDS_GOTO_FILE" > /dev/null 2>&1
       echo "Cleaned all aliases.."
-      exit
+      return
     ;;
   --help|-h|help)
       showHelpMenu 
-      exit 
+      return 
     ;; 
   list|--list|-l)
     cat "$LDS_GOTO_FILE"
@@ -69,7 +69,7 @@ do
       if [[ "$ALIAS" == "" ]]
       then 
         showHelpMenu 
-        exit
+        return
       fi 
       shift
       ;;
