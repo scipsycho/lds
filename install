@@ -19,9 +19,13 @@ then
   rm -rf "$LDS_HOME_DIR"
 fi
 
+mkdir ./tmp
 cp -r . "$LDS_HOME_DIR"
-cp -r "/tmp/LDS_temp_dir/" "$LDS_HOME_DIR/tmp/"
-rm -rf "/tmp/LDS_temp_dir"
+if [ -f "/tmp/LDS_temp_dir" ]
+then
+  cp -r "/tmp/LDS_temp_dir/" "$LDS_HOME_DIR/tmp/"
+  rm -rf "/tmp/LDS_temp_dir"
+fi
 chmod -R a-wX "$LDS_HOME_DIR"
 chmod -R a+wX "$LDS_HOME_DIR/tmp"
 
