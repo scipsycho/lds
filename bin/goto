@@ -78,10 +78,11 @@ done
 
 if [[ "$isRegister" == "n" ]]
 then
+  ALIAS="LDS_ALIAS_$ALIAS"
   cd "${!ALIAS}"
 elif [[ -d "$REGISTER_DIR" ]]
 then 
-  echo "$ALIAS=$REGISTER_DIR" >> "$LDS_GOTO_FILE"
+  echo "LDS_ALIAS_$ALIAS=$REGISTER_DIR" >> "$LDS_GOTO_FILE"
   echo "Alias $ALIAS has been created for $REGISTER_DIR" 
 fi
 
