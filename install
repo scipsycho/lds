@@ -19,7 +19,7 @@ then
   rm -rf "$LDS_HOME_DIR"
 fi
 
-mkdir ./tmp
+[[ -d ./tmp ]] || mkdir ./tmp
 cp -r . "$LDS_HOME_DIR"
 if [ -d "/tmp/LDS_temp_dir" ]
 then
