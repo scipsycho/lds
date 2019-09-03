@@ -65,7 +65,9 @@ do
     do
       alias_temp=`echo $i | awk -F "=" '{ print $1 }'`
       alias_dir_temp=`echo $i | awk -F "=" '{ print $2 }'`
-		  echo "$(tput setaf 2)$alias_temp$(tput setaf 4): $(tput setaf 5)$alias_dir_temp$(tput sgr0)"
+      alias_temp=`printf "%-20s" "$alias_temp"`
+      alias_dir_temp=`printf "%-20s" "$alias_dir_temp"` 
+      echo "$alias_temp$(tput setaf 2)=======>$(tput sgr0)   $alias_dir_temp$(tput sgr0)"
     done
     return
     ;;
