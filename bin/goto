@@ -24,6 +24,8 @@ function showHelpMenu {
   echo "Usage: goto [OPTIONS] [DIR] ALIAS"
   echo "Options:"
   echo "-r, --register DIR ALIAS: create an alias ALIAS for the directory DIR"
+  echo "-d  --deregister ALIAS: removes the ALIAS"
+  echo "-l, --list, list: shows the list of registered ALIAS"
 }
 if [[ $# -gt 3 ]] 
     then
@@ -32,23 +34,32 @@ if [[ $# -gt 3 ]]
     fi
 
 
-isRegister=n
-REGISTER_DIR=""
-ALIAS=""
+LDS_isRegister=n
+LDS_isDeregister=n
+LDS_REGISTER_DIR=""
+LDS_TEMP_VAR_ALIAS=""
 while [[ $# -gt 0 ]]
 do 
   case $1 in 
     -r|--register)
-      REGISTER_DIR="$2"
-      isRegister="y"
-      if ! [[ -d "$REGISTER_DIR" ]]
+      LDS_REGISTER_DIR="$2"
+      LDS_isRegister="y"
+      if ! [[ -d "$LDS_REGISTER_DIR" ]]
       then 
           echo "No such directory! See --help for more details."
         return
       fi 
-      REGISTER_DIR=`cd $REGISTER_DIR; pwd`
+      LDS_REGISTER_DIR=`cd $REGISTER_DIR; pwd`
       shift
       shift
+      ;;
+    -d|--deregister)
+      LDS_TEMP_VAR_ALIAS=$1
+      if [[ "${!LDS_TEMP_VAR_ALIAS}" == "" ]]
+      then 
+        showHelpMenu 
+      fi 
+      shift 
       ;;
     clean)
       mv "$LDS_GOTO_FILE" "${LDS_GOTO_FILE}_backup"
@@ -63,17 +74,17 @@ do
   list|--list|-l)
     for i in `( set -o posix ; set ) | grep "^LDS_ALIAS_"`
     do
-      alias_temp=`echo $i | awk -F "=" '{ print $1 }'`
-      alias_dir_temp=`echo $i | awk -F "=" '{ print $2 }'`
-      alias_temp=`printf "%-20s" "$alias_temp"`
-      alias_dir_temp=`printf "%-20s" "$alias_dir_temp"` 
-      echo "$alias_temp$(tput setaf 2)=======>$(tput sgr0)   $alias_dir_temp$(tput sgr0)"
+      lds_alias_temp=`echo $i | awk -F "=" '{ print $1 }'`
+      lds_alias_dir_temp=`echo $i | awk -F "=" '{ print $2 }'`
+      lds_alias_temp=`printf "%-20s" "$lds_alias_temp"`
+      lds_alias_dir_temp=`printf "%-20s" "$lds_alias_dir_temp"` 
+      echo "$lds_alias_temp$(tput setaf 2)=======>$(tput sgr0)   $lds_alias_dir_temp$(tput sgr0)"
     done
     return
     ;;
     *)
-      ALIAS=$1
-      if [[ "$ALIAS" == "" ]]
+      LDS_TEMP_VAR_ALIAS=$1
+      if [[ "${!LDS_TEMP_VAR_ALIAS}" == "" ]]
       then 
         showHelpMenu 
         return
@@ -83,14 +94,14 @@ do
   esac
 done
 
-if [[ "$isRegister" == "n" ]]
+if [[ "$LDS_isRegister" == "n" ]]
 then
-  ALIAS="LDS_ALIAS_$ALIAS"
-  cd "${!ALIAS}"
-elif [[ -d "$REGISTER_DIR" ]]
+  LDS_TEMP_VAR_ALIAS="LDS_ALIAS_$ALIAS"
+  cd "${!LDS_TEMP_VAR_ALIAS}"
+elif [[ -d "$LDS_REGISTER_DIR" ]]
 then 
-  echo "LDS_ALIAS_$ALIAS=$REGISTER_DIR" >> "$LDS_GOTO_FILE"
-  echo "Alias $ALIAS has been created for $REGISTER_DIR" 
+  echo "LDS_LDS_TEMP_VAR_ALIAS_$ALIAS=$LDS_REGISTER_DIR" >> "$LDS_GOTO_FILE"
+  echo "Alias $LDS_TEMP_VAR_ALIAS has been created for $LDS_REGISTER_DIR" 
 fi
 
 
