@@ -21,11 +21,13 @@ function printHash {
 
 function showHelpMenu {
   printHash 10 #
-  echo "Usage: goto [OPTIONS] [DIR] ALIAS"
+  echo "Usage: goto [OPTIONS] [DIR] ALIAS|clean|list|help"
   echo "Options:"
   echo "-r, --register DIR ALIAS: create an alias ALIAS for the directory DIR"
   echo "-d  --deregister ALIAS: removes the ALIAS"
   echo "-l, --list, list: shows the list of registered ALIAS"
+  echo "clean: cleans the list of aliases"
+  echo "-h, --help, help: shows this help menu"
 }
 if [[ $# -gt 3 ]] 
     then
@@ -43,23 +45,25 @@ do
   case $1 in 
     -r|--register)
       LDS_REGISTER_DIR="$2"
+      LDS_TEMP_VAR_ALIAS="$3"
       LDS_isRegister="y"
       if ! [[ -d "$LDS_REGISTER_DIR" ]]
       then 
           echo "No such directory! See --help for more details."
         return
       fi 
-      LDS_REGISTER_DIR=`cd $REGISTER_DIR; pwd`
-      shift
-      shift
+      LDS_REGISTER_DIR=`cd $LDS_REGISTER_DIR && pwd`
+      break 
       ;;
     -d|--deregister)
-      LDS_TEMP_VAR_ALIAS=$1
+      LDS_TEMP_VAR_ALIAS="LDS_ALIAS_$2"
       if [[ "${!LDS_TEMP_VAR_ALIAS}" == "" ]]
       then 
         showHelpMenu 
+        return
       fi 
-      shift 
+      LDS_isDeregister="y"
+      break 
       ;;
     clean)
       mv "$LDS_GOTO_FILE" "${LDS_GOTO_FILE}_backup"
@@ -83,25 +87,27 @@ do
     return
     ;;
     *)
-      LDS_TEMP_VAR_ALIAS=$1
+      LDS_TEMP_VAR_ALIAS="LDS_ALIAS_$1"
       if [[ "${!LDS_TEMP_VAR_ALIAS}" == "" ]]
       then 
         showHelpMenu 
         return
       fi 
-      shift
+      break
       ;;
   esac
 done
 
-if [[ "$LDS_isRegister" == "n" ]]
-then
-  LDS_TEMP_VAR_ALIAS="LDS_ALIAS_$ALIAS"
-  cd "${!LDS_TEMP_VAR_ALIAS}"
-elif [[ -d "$LDS_REGISTER_DIR" ]]
+if [[ "$LDS_isRegister" == "y" ]]
 then 
-  echo "LDS_LDS_TEMP_VAR_ALIAS_$ALIAS=$LDS_REGISTER_DIR" >> "$LDS_GOTO_FILE"
+  echo "LDS_ALIAS_$LDS_TEMP_VAR_ALIAS=$LDS_REGISTER_DIR" >> "$LDS_GOTO_FILE"
   echo "Alias $LDS_TEMP_VAR_ALIAS has been created for $LDS_REGISTER_DIR" 
+elif [[ "$LDS_isDeregister" == "y" ]]
+then
+  cat "$LDS_GOTO_FILE" > "${LDS_GOTO_FILE}_backup"
+  cat "${LDS_GOTO_FILE}_backup" | grep -v "${LDS_TEMP_VAR_ALIAS}=" > "$LDS_GOTO_FILE"
+else 
+  cd "${!LDS_TEMP_VAR_ALIAS}"
 fi
 
 
