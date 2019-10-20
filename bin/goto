@@ -1,16 +1,5 @@
 #!/bin/bash
 
-
-if [[ -f "$LDS_GOTO_FILE" ]]
-then 
-  source "$LDS_GOTO_FILE" 
-else
-  touch "$LDS_GOTO_FILE"
-  echo "#!/bin/bash"  > "$LDS_GOTO_FILE" 
-  echo "" >> "$LDS_GOTO_FILE"
-  chmod a+x "$LDS_GOTO_FILE"
-fi 
-
 function printHash {
   for i in `seq $1` 
   do
@@ -29,85 +18,101 @@ function showHelpMenu {
   echo "clean: cleans the list of aliases"
   echo "-h, --help, help: shows this help menu"
 }
-if [[ $# -gt 3 ]] 
-    then
-        showHelpMenu
-        return
-    fi
 
+if [[ $# -gt 3 ]] 
+then
+    showHelpMenu
+    return
+fi
 
 LDS_isRegister=n
 LDS_isDeregister=n
 LDS_REGISTER_DIR=""
 LDS_TEMP_VAR_ALIAS=""
-while [[ $# -gt 0 ]]
-do 
-  case $1 in 
-    -r|--register)
-      LDS_REGISTER_DIR="$2"
-      LDS_TEMP_VAR_ALIAS="$3"
-      LDS_isRegister="y"
-      if ! [[ -d "$LDS_REGISTER_DIR" ]]
-      then 
-          echo "No such directory! See --help for more details."
+
+function _ {
+  if [[ -f "$LDS_GOTO_FILE" ]]
+  then 
+    source "$LDS_GOTO_FILE" 
+  else
+    touch "$LDS_GOTO_FILE"
+    echo "#!/bin/bash"  > "$LDS_GOTO_FILE" 
+    echo "" >> "$LDS_GOTO_FILE"
+    chmod a+x "$LDS_GOTO_FILE"
+  fi 
+
+  while [[ $# -gt 0 ]]
+  do 
+    case $1 in 
+      -r|--register)
+        LDS_REGISTER_DIR="$2"
+        LDS_TEMP_VAR_ALIAS="$3"
+        LDS_isRegister="y"
+        if ! [[ -d "$LDS_REGISTER_DIR" ]]
+        then 
+            echo "No such directory! See --help for more details."
+          return
+        fi 
+        LDS_REGISTER_DIR=`cd $LDS_REGISTER_DIR && pwd`
+        break 
+        ;;
+      -d|--deregister)
+        LDS_TEMP_VAR_ALIAS="LDS_ALIAS_$2"
+        if [[ "${!LDS_TEMP_VAR_ALIAS}" == "" ]]
+        then 
+          showHelpMenu 
+          return
+        fi 
+        LDS_isDeregister="y"
+        break 
+        ;;
+      clean)
+        mv "$LDS_GOTO_FILE" "${LDS_GOTO_FILE}_backup"
+        rm "$LDS_GOTO_FILE" > /dev/null 2>&1
+        echo "Cleaned all aliases.."
         return
-      fi 
-      LDS_REGISTER_DIR=`cd $LDS_REGISTER_DIR && pwd`
-      break 
       ;;
-    -d|--deregister)
-      LDS_TEMP_VAR_ALIAS="LDS_ALIAS_$2"
-      if [[ "${!LDS_TEMP_VAR_ALIAS}" == "" ]]
-      then 
-        showHelpMenu 
-        return
-      fi 
-      LDS_isDeregister="y"
-      break 
-      ;;
-    clean)
-      mv "$LDS_GOTO_FILE" "${LDS_GOTO_FILE}_backup"
-      rm "$LDS_GOTO_FILE" > /dev/null 2>&1
-      echo "Cleaned all aliases.."
-      return
-    ;;
-  --help|-h|help)
+    --help|-h|help)
       showHelpMenu 
       return 
-    ;; 
-  list|--list|-l)
-    for i in `( set -o posix ; set ) | grep "^LDS_ALIAS_"`
-    do
-      lds_alias_temp=`echo $i | awk -F "=" '{ print $1 }'`
-      lds_alias_dir_temp=`echo $i | awk -F "=" '{ print $2 }'`
-      lds_alias_temp=`printf "%-20s" "$lds_alias_temp"`
-      lds_alias_dir_temp=`printf "%-20s" "$lds_alias_dir_temp"` 
-      echo "$lds_alias_temp$(tput setaf 2)=======>$(tput sgr0)   $lds_alias_dir_temp$(tput sgr0)"
-    done
-    return
-    ;;
-    *)
-      LDS_TEMP_VAR_ALIAS="LDS_ALIAS_$1"
-      if [[ "${!LDS_TEMP_VAR_ALIAS}" == "" ]]
-      then 
-        showHelpMenu 
-        return
-      fi 
-      break
+      ;; 
+    list|--list|-l)
+      for i in `( set -o posix ; set ) | grep "^LDS_ALIAS_"`
+      do
+        lds_alias_temp=`echo $i | awk -F "=" '{ print $1 }'`
+        lds_alias_dir_temp=`echo $i | awk -F "=" '{ print $2 }'`
+        lds_alias_temp=`printf "%-20s" "$lds_alias_temp"`
+        lds_alias_dir_temp=`printf "%-20s" "$lds_alias_dir_temp"` 
+        echo "$lds_alias_temp$(tput setaf 2)=======>$(tput sgr0)   $lds_alias_dir_temp$(tput sgr0)"
+      done
+      return
       ;;
-  esac
-done
+      *)
+        LDS_TEMP_VAR_ALIAS="LDS_ALIAS_$1"
+        if [[ "${!LDS_TEMP_VAR_ALIAS}" == "" ]]
+        then 
+          showHelpMenu 
+          return
+        fi 
+        LDS_TEMP_VAR_ALIAS="${!LDS_TEMP_VAR_ALIAS}"
+        break
+        ;;
+    esac
+  done
+}
+
+_ $@  
 
 if [[ "$LDS_isRegister" == "y" ]]
 then 
-  echo "LDS_ALIAS_$LDS_TEMP_VAR_ALIAS=$LDS_REGISTER_DIR" >> "$LDS_GOTO_FILE"
+  echo "local LDS_ALIAS_$LDS_TEMP_VAR_ALIAS=$LDS_REGISTER_DIR" >> "$LDS_GOTO_FILE"
   echo "Alias $LDS_TEMP_VAR_ALIAS has been created for $LDS_REGISTER_DIR" 
 elif [[ "$LDS_isDeregister" == "y" ]]
 then
   cat "$LDS_GOTO_FILE" > "${LDS_GOTO_FILE}_backup"
   cat "${LDS_GOTO_FILE}_backup" | grep -v "${LDS_TEMP_VAR_ALIAS}=" > "$LDS_GOTO_FILE"
 else 
-  cd "${!LDS_TEMP_VAR_ALIAS}"
+  cd "${LDS_TEMP_VAR_ALIAS}"
 fi
 
 
