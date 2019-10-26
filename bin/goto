@@ -17,13 +17,21 @@ function showHelpMenu {
   echo "-l, --list, list: shows the list of registered ALIAS"
   echo "clean: cleans the list of aliases"
   echo "-h, --help, help: shows this help menu"
+  echo "--rd: register a default alias (will move to this directory when no alias is provided)"
+
+  echo ""
+  echo "Note: if you use \"default\" alias, you can simply use \"goto\" to move to that directory"
 }
 
 if [[ $# -gt 3 ]] 
 then
     showHelpMenu
     return
-fi
+elif [[ "$#" == "0" ]]
+then
+  source $LDS_BIN_DIR/goto default
+  return
+fi 
 
 LDS_isRegister=n
 LDS_isDeregister=n
@@ -44,9 +52,26 @@ function _ {
   while [[ $# -gt 0 ]]
   do 
     case $1 in 
+      --rd)
+        LDS_REGISTER_DIR="$2"
+        LDS_TEMP_VAR_ALIAS="default"
+        LDS_isRegister="y"
+        if ! [[ -d "$LDS_REGISTER_DIR" ]]
+        then 
+          echo "No such directory! see --help for more details."
+          return 
+        fi 
+        LDS_REGISTER_DIR=`cd $LDS_REGISTER_DIR && pwd`
+        break 
+        ;;
       -r|--register)
         LDS_REGISTER_DIR="$2"
-        LDS_TEMP_VAR_ALIAS="$3"
+        LDS_TEMP_VAR_ALIAS=`echo "$3" | sed 's/[^a-zA-Z0-9_]//g'` 
+        if [[ "$LDS_TEMP_VAR_ALIAS" == "" ]]
+        then 
+          echo "Please use alpha numeric characters only!"
+          return 
+        fi 
         LDS_isRegister="y"
         if ! [[ -d "$LDS_REGISTER_DIR" ]]
         then 
