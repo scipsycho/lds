@@ -10,7 +10,13 @@ function printHash {
 
 function showHelpMenu {
   printHash 10 #
-  echo "Usage: goto [OPTIONS] [DIR] ALIAS|clean|list|help"
+  echo "Usage: goto [OPTIONS] [DIR] [commands|ALIAS]"
+  echo 
+  echo "Commands:"
+  echo "list: lists all aliases currently registered"
+  echo "clean: cleans all aliases"
+  echo "help: shows this help menu"
+  echo
   echo "Options:"
   echo "-r, --register DIR ALIAS: create an alias ALIAS for the directory DIR"
   echo "-d  --deregister ALIAS: removes the ALIAS"
@@ -118,6 +124,7 @@ function _ {
           showHelpMenu 
           return
         fi 
+        echo "something strange is going on"
         LDS_TEMP_VAR_ALIAS="${!LDS_TEMP_VAR_ALIAS}"
         break
         ;;
