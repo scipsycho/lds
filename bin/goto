@@ -17,6 +17,7 @@ function showHelpMenu {
   echo "Commands:"
   echo "list: lists all aliases currently registered"
   echo "clean: cleans all aliases"
+  echo "restore: undo the previous opreatino. (Remember restore itself cannot be undone)"
   echo "help: shows this help menu"
   echo
   echo "Options:"
@@ -106,11 +107,22 @@ function _ {
         ;;
       clean)
         mv "$LDS_GOTO_FILE" "${LDS_GOTO_FILE}_backup"
-        rm "$LDS_GOTO_FILE" > /dev/null 2>&1
+        echo "" > "$LDS_GOTO_FILE"
         echo "Cleaned all aliases.."
         LDS_isExit="true"
         return
-      ;;
+        ;;
+      restore)
+        echo "This is a irreverisble operation!"
+        echo "Do you still wish to continue (y/n): "
+        read choice 
+        if [[ "$choice" == "y" ]]
+        then 
+          cat "${LDS_GOTO_FILE}_backup" > "$LDS_GOTO_FILE"
+        fi 
+        LDS_isExit="true"
+        return 
+        ;;
     --help|-h|help)
       showHelpMenu 
       return 
