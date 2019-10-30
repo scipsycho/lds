@@ -19,6 +19,7 @@ function showHelpMenu {
   echo "clean: cleans all aliases"
   echo "restore: undo the previous opreatino. (Remember restore itself cannot be undone)"
   echo "help: shows this help menu"
+  echo "version: show version of the program"
   echo
   echo "Options:"
   echo "-r, --register DIR ALIAS: create an alias ALIAS for the directory DIR"
@@ -26,6 +27,7 @@ function showHelpMenu {
   echo "-l, --list, list: shows the list of registered ALIAS"
   echo "--rd: register a default alias (will move to this directory when no alias is provided)"
   echo "-h, --help, help: shows this help menu"
+  echo "-v, --version: show version of the program"
 
   echo ""
   echo "Note: if you use \"default\" alias, you can simply use \"goto\" to move to that directory"
@@ -135,6 +137,11 @@ function _ {
         echo "$(tput setaf 2)$lds_alias_temp$(tput sgr0) ================> $lds_alias_dir_temp$(tput sgr0)" | awk '{ printf "%-20s%-18s%-20s", $1, $2, $3}'
         echo ""
       done
+      LDS_isExit="true"
+      return
+      ;;
+    -v|--version|version)
+      echo "1.0.0.1v"
       LDS_isExit="true"
       return
       ;;
