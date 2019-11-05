@@ -130,10 +130,11 @@ function _ {
       return 
       ;; 
     list|--list|-l)
-      for i in `( set -o posix ; set ) | grep "^LDS_ALIAS_"`
+      for i in `( cat "$LDS_GOTO_FILE" | cut -d " " -f 2 )`
       do
-        lds_alias_temp=`echo $i | awk -F "=" '{ print $1 }' | cut -d '_' -f 3`
-        lds_alias_dir_temp=`echo $i | awk -F "=" '{ print $2 }'`
+        lds_alias_temp=`echo $i | cut -d '=' -f 1`
+        lds_alias_temp=${lds_alias_temp#LDS_ALIAS_}
+        lds_alias_dir_temp=`echo $i | cut -d '=' -f 2`
         echo "$(tput setaf 2)$lds_alias_temp$(tput sgr0) ================> $lds_alias_dir_temp$(tput sgr0)" | awk '{ printf "%-20s%-18s%-20s", $1, $2, $3}'
         echo ""
       done
