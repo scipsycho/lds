@@ -130,19 +130,12 @@ function _ {
       return 
       ;; 
     list|--list|-l)
-      for i in `( cat "$LDS_GOTO_FILE" | cut -d " " -f 2 )`
-      do
-        lds_alias_temp=`echo $i | cut -d '=' -f 1`
-        lds_alias_temp=${lds_alias_temp#LDS_ALIAS_}
-        lds_alias_dir_temp=`echo $i | cut -d '=' -f 2`
-        echo "$(tput setaf 2)$lds_alias_temp$(tput sgr0) ================> $lds_alias_dir_temp$(tput sgr0)" | awk '{ printf "%-20s%-18s%-20s", $1, $2, $3}'
-        echo ""
-      done
+      cat $LDS_GOTO_FILE  | sed "s/local //g" | sed "s/\"//g" | sed "s/^LDS_ALIAS_//g" | awk -F '=' '{ printf "\033[32m%-20s\033[37m%-18s%-20s\n", $1 , "====>" , $2 }'
       LDS_isExit="true"
       return
       ;;
     -v|--version|version)
-      echo "1.0.0.1v"
+      echo "1.1.0.0v"
       LDS_isExit="true"
       return
       ;;
@@ -168,7 +161,7 @@ fi
 
 if [[ "$LDS_isRegister" == "y" ]]
 then 
-  echo "local LDS_ALIAS_$LDS_TEMP_VAR_ALIAS=$LDS_REGISTER_DIR" >> "$LDS_GOTO_FILE"
+  echo "local LDS_ALIAS_$LDS_TEMP_VAR_ALIAS=\"$LDS_REGISTER_DIR\"" >> "$LDS_GOTO_FILE"
   echo "Alias $LDS_TEMP_VAR_ALIAS has been created for $LDS_REGISTER_DIR" 
 elif [[ "$LDS_isDeregister" == "y" ]]
 then
