@@ -135,7 +135,7 @@ function _ {
       return
       ;;
     -v|--version|version)
-      echo "1.1.0.0v"
+      echo "1.2.0.0v"
       LDS_isExit="true"
       return
       ;;
