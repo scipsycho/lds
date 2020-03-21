@@ -29,6 +29,14 @@ fi
 chmod -R a-wX "$LDS_HOME_DIR"
 chmod -R a+wX "$LDS_HOME_DIR/tmp"
 
+#if bash completion exists link to bash completion dir 
+if [[ $BASH_COMPLETION_COMPAT_DIR != "" ]]
+then
+ ln -s "$LDS_HOME_DIR/bin/goto_bash_completion.sh" "$BASH_COMPLETION_COMPAT_DIR/goto"
+else 
+  echo "You do not have bash completion installted. If required, please install bash_completion and enjoy bash completion on goto command"
+fi
+
 #checking whether the system is Linux or macOs which 
 #will change the name of the bash file
 if [[ `uname -s` == *"Darwin"* ]]
